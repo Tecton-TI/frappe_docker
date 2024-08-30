@@ -9,6 +9,7 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
+      - .:/home/frappe/frappe-bench
 
   configurator:
     image: frappe/erpnext:v15.33.5
@@ -37,6 +38,7 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
+      - .:/home/frappe/frappe-bench
 
   create-site:
     image: frappe/erpnext:v15.33.5
@@ -46,6 +48,7 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
+      - .:/home/frappe/frappe-bench
     entrypoint:
       - bash
       - -c
@@ -87,6 +90,7 @@ services:
       MYSQL_ROOT_PASSWORD: admin
     volumes:
       - db-data:/var/lib/mysql
+      - .:/home/frappe/frappe-bench
 
   frontend:
     image: frappe/erpnext:v15.33.5
@@ -109,6 +113,7 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
+      - .:/home/frappe/frappe-bench
     ports:
       - "8080:8080"
 
@@ -125,6 +130,7 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
+      - .:/home/frappe/frappe-bench
 
   queue-short:
     image: frappe/erpnext:v15.33.5
@@ -139,6 +145,7 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
+      - .:/home/frappe/frappe-bench
 
   redis-queue:
     image: redis:6.2-alpine
@@ -147,6 +154,7 @@ services:
         condition: on-failure
     volumes:
       - redis-queue-data:/data
+      - .:/home/frappe/frappe-bench
 
   redis-cache:
     image: redis:6.2-alpine
@@ -155,6 +163,7 @@ services:
         condition: on-failure
     volumes:
       - redis-cache-data:/data
+      - .:/home/frappe/frappe-bench
 
   scheduler:
     image: frappe/erpnext:v15.33.5
@@ -167,6 +176,7 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
+      - .:/home/frappe/frappe-bench
 
   websocket:
     image: frappe/erpnext:v15.33.5
@@ -179,6 +189,7 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
+      - .:/home/frappe/frappe-bench
 
 volumes:
   db-data:
@@ -186,3 +197,4 @@ volumes:
   redis-cache-data:
   sites:
   logs:
+  data-erp:
