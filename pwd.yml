@@ -46,7 +46,6 @@ services:
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
-      - .:/home/frappe/frappe-bench
     entrypoint:
       - bash
       - -c
@@ -191,4 +190,3 @@ volumes:
   redis-cache-data:
   sites:
   logs:
-  data-erp:
