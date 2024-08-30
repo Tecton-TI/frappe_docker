@@ -1,0 +1,26 @@
+steps:
+  #Docker compose build
+  - name: 'docker/compose:1.29.2'
+    script: |
+      docker-compose -f pwd.yml up -d
+  #docker tag
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['tag', 'frappe/erpnext:v15.33.5', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    script: |
+      export INSTANCE2=$INSTANCE
+      export LOCATION2="us-east1-b"
+      gcloud compute scp --zone=$LOCATION2 --recurse /workspace/* $GUSER@$INSTANCE2:~/erp-tecton
+      gcloud compute ssh --zone=$LOCATION2 $GUSER@$INSTANCE2 --command "docker compose -f ~/erp-tecton/pwd.yml down -v --rmi all"
+      gcloud compute ssh --zone=$LOCATION2 $GUSER@$INSTANCE2 --command "docker compose -f ~/erp-tecton/pwd.yml up -d"
+    secretEnv: ['INSTANCE', 'GUSER']
+images: ['gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/instance_id/versions/1
+    env: 'INSTANCE'
+  - versionName: projects/$PROJECT_ID/secrets/cloud_user/versions/1
+    env: 'GUSER'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
